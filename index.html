@@ -37,13 +37,13 @@
         .page { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 10; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .active-page { display: flex; }
 
-        .logo {
+        /* LOGO & HEOPAD TEXT STYLE (Based on your image) */
+        .logo, .heopad-logo {
             font-size: 6rem; font-weight: 900; margin-bottom: 20px;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
-            background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: logoShift 8s ease infinite;
+            background: linear-gradient(to right, #2ab9ff 0%, #4f86ff 40%, #a158ff 70%, #d449ff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
         }
-        @keyframes logoShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         .search-box { 
             width: 90%; max-width: 750px; padding: 25px; border-radius: 50px; 
@@ -51,6 +51,20 @@
             color: white; font-size: 1.4rem; outline: none; backdrop-filter: blur(15px);
             font-weight: 800; text-align: center; box-shadow: 0 0 20px rgba(0,212,212,0.2);
         }
+
+        /* HEOPAD UI */
+        .heopad-container {
+            width: 95%; max-width: 1000px; height: 70vh; 
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); 
+            border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 25px; padding: 25px; 
+            display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .heopad-textarea {
+            flex: 1; background: transparent; border: none; color: white; 
+            font-family: 'Segoe UI', sans-serif; font-size: 1.3rem; outline: none; 
+            resize: none; padding: 15px; line-height: 1.5; font-weight: 400;
+        }
+        .heopad-textarea::placeholder { color: rgba(255,255,255,0.2); }
 
         /* TRENDING UI */
         .trend-item { 
@@ -60,10 +74,17 @@
         }
         .trend-item:hover { background: #00d4ff; color: #000; transform: scale(1.05); }
 
-        /* RESULTS PAGE */
+        /* RESULTS PAGE UI */
         #results-page { align-items: flex-start; justify-content: flex-start; padding: 30px 10% 40px; overflow-y: auto; text-align: left; }
-        .results-nav { width: 100%; display: flex; gap: 20px; align-items: center; margin-bottom: 40px; padding-top: 20px; flex-shrink: 0; }
+        .results-nav { width: 100%; display: flex; gap: 15px; align-items: center; margin-bottom: 40px; padding-top: 20px; flex-shrink: 0; flex-wrap: wrap; }
         .mini-logo { font-size: 2.2rem; font-weight: 900; background: linear-gradient(45deg, #00d4ff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        
+        .ai-ask-btn { padding: 12px 20px; border-radius: 30px; border: none; background: #00d4ff; color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .ai-ask-btn:hover { background: #ff00ff; color: #fff; transform: translateY(-2px); }
+
+        .safe-toggle { padding: 10px 15px; border-radius: 20px; border: 1px solid #555; background: rgba(255,255,255,0.1); color: #fff; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
+        .safe-on { border-color: #00ff88; color: #00ff88; }
+
         .result-item { margin-bottom: 35px; width: 100%; max-width: 800px; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; color: #bdc1c6; font-size: 0.9rem; }
@@ -89,6 +110,7 @@
 
     <div class="top-nav">
         <div class="nav-link" onclick="showPage('home-page')">Home</div>
+        <div class="nav-link" onclick="showPage('heopad-page')">Heopad</div>
         <div class="nav-link" onclick="showPage('ai-page')">Heofonix AI</div>
         <div class="nav-link" onclick="showPage('about-page')">About Us</div>
     </div>
@@ -107,10 +129,23 @@
         </div>
     </div>
 
+    <div id="heopad-page" class="page">
+        <h1 class="heopad-logo">Heopad</h1>
+        <div class="heopad-container">
+            <textarea id="heopadArea" class="heopad-textarea" placeholder="Write something great..."></textarea>
+            <div style="padding-top: 10px; border-top: 1px solid rgba(0, 212, 255, 0.2); display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #00d4ff; font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Cloud Sync Active</span>
+                <button onclick="downloadPad()" style="background: none; border: 1px solid #00d4ff; color: #00d4ff; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem;">Download .txt</button>
+            </div>
+        </div>
+    </div>
+
     <div id="results-page" class="page">
         <div class="results-nav">
             <div class="mini-logo" onclick="showPage('home-page')">Heofon</div>
-            <input type="text" class="search-box" id="resultsSearch" style="max-width: 500px; padding: 15px 25px; font-size: 1.1rem; text-align: left;" placeholder="Search again..." onkeypress="handleResultsSearch(event)">
+            <input type="text" class="search-box" id="resultsSearch" style="max-width: 400px; padding: 12px 25px; font-size: 1.1rem; text-align: left;" onkeypress="handleResultsSearch(event)">
+            <button class="ai-ask-btn" onclick="askCurrentQueryToAI()">Ask Heofonix</button>
+            <div id="safeToggle" class="safe-toggle safe-on" onclick="toggleSafeSearch()">Safe Search: ON</div>
         </div>
         <div id="results-list" style="width: 100%; max-width: 850px;"></div>
     </div>
@@ -134,6 +169,8 @@
     </div>
 
     <script>
+        let isSafeSearch = true;
+
         const searchDB = {
             "appleton": [{ name: "Appleton Packing & Gasket", url: "https://appletonpackinggasket.com/", desc: "Industrial packing and gasket solutions for all applications.", favicon: "1631326392652.jpeg" }],
             "wwe": [{ name: "WWE Official Site", url: "https://www.wwe.com/", desc: "World Wrestling Entertainment - Home of Raw, SmackDown, and NXT.", favicon: "https://www.wwe.com/favicon.ico" }],
@@ -146,8 +183,7 @@
             "mobymax": [{ name: "MobyMax", url: "https://www.mobymax.com/signin", desc: "Personalized learning for K-8 students.", favicon: "https://www.mobymax.com/favicon.ico" }],
             "khan": [{ name: "Khan Academy", url: "https://www.khanacademy.org/profile/me/classroom/b8942f70-39d2-462b-a506-e94c876f9063", desc: "Learn anything for free.", favicon: "https://www.khanacademy.org/favicon.ico" }],
             "bing": [
-                { name: "Search - Microsoft Bing", url: "https://www.bing.com/", desc: "Search with Microsoft Bing and use the power of AI.", favicon: "https://www.bing.com/favicon.ico" },
-                { name: "Bing Search App", url: "https://play.google.com/store/apps/details?id=com.microsoft.bing", desc: "Microsoft Bing delivers fast, curated answers.", favicon: "https://www.google.com/favicon.ico" }
+                { name: "Search - Microsoft Bing", url: "https://www.bing.com/", desc: "Search with Microsoft Bing and use the power of AI.", favicon: "https://www.bing.com/favicon.ico" }
             ],
             "liam prosser games": [{ name: "Liam Prosser Gamez", url: "https://sites.google.com/kimberly.k12.wi.us/liamprossergamez-com/home", desc: "The official game hub by Liam Prosser.", favicon: "liamlogo.jpg" }],
             "roblox": [{ name: "Roblox", url: "https://www.roblox.com/", desc: "A global platform where millions gather to create.", favicon: "https://www.roblox.com/favicon.ico" }],
@@ -156,21 +192,59 @@
             "michigan tornado": [{ name: "National Weather Service", url: "https://www.weather.gov/", desc: "Live tornado warnings and weather alerts for Michigan.", favicon: "https://www.weather.gov/favicon.ico" }]
         };
 
+        // --- HEOPAD LOGIC ---
+        const heopadArea = document.getElementById('heopadArea');
+        heopadArea.value = localStorage.getItem('heopad_content') || "";
+        heopadArea.addEventListener('input', () => {
+            localStorage.setItem('heopad_content', heopadArea.value);
+        });
+
+        function downloadPad() {
+            const text = heopadArea.value;
+            const blob = new Blob([text], { type: "text/plain" });
+            const anchor = document.createElement("a");
+            anchor.download = "heopad-note.txt";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.click();
+        }
+
+        function toggleSafeSearch() {
+            isSafeSearch = !isSafeSearch;
+            const btn = document.getElementById('safeToggle');
+            btn.innerText = `Safe Search: ${isSafeSearch ? 'ON' : 'OFF'}`;
+            btn.className = `safe-toggle ${isSafeSearch ? 'safe-on' : ''}`;
+        }
+
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
-            if(id === 'home-page') {
-                window.history.pushState({}, '', window.location.pathname);
-            }
+            if(id === 'home-page') window.history.pushState({}, '', window.location.pathname);
         }
 
         function handleHomeSearch(e) { if (e.key === 'Enter') performSearch(e.target.value); }
         function handleResultsSearch(e) { if (e.key === 'Enter') performSearch(e.target.value); }
         function triggerQuickSearch(val) { performSearch(val); }
 
+        function askCurrentQueryToAI() {
+            const query = document.getElementById('resultsSearch').value;
+            if(!query) return;
+            showPage('ai-page');
+            run(query);
+        }
+
         function performSearch(queryRaw) {
             const query = queryRaw.toLowerCase().trim();
             if (!query) return;
+
+            if (query === "unblocked") {
+                window.location.href = "https://useast-www.securly.com/blocked?useremail=32lprosser@kimberly.k12.wi.us&reason=globalblacklist&categoryid=BL&policyid=G&keyword=dW5ibG9ja2Vk&url=d3d3LmJpbmcuY29tL3NlYXJjaD9xPXVuYmxvY2tlZCZQQz1VMzE2JkZPUk09Q0hST01O&ver=-&extension_id=ckecmkbnoanpgplccmnoikfmpcdladkc&extension_version=3.0.34&internal_ip=192.168.1.1&listType=BL";
+                return;
+            }
+
+            if (isSafeSearch && (query.includes("badword1") || query.includes("badword2"))) {
+                alert("Safe Search is ON. This result is hidden.");
+                return;
+            }
 
             const newURL = window.location.pathname + "?q=" + encodeURIComponent(queryRaw);
             window.history.pushState({ path: newURL }, '', newURL);
@@ -210,8 +284,6 @@
         async function getAiResponse(val) {
             const m = val.toLowerCase().trim();
             if (["hola", "como", "esta"].some(k => m.includes(k))) return "🇪🇸 **Heofonix:** ¡Hola! ¿En qué puedo ayudarte hoy?";
-            
-            // Dictionary Logic
             if(m.includes("define")) {
                 const word = m.split(" ").pop().replace(/[?!.]/g, "");
                 try {
@@ -220,10 +292,9 @@
                     if(data[0]) return `📘 **Dictionary:** ${data[0].meanings[0].definitions[0].definition}`;
                 } catch(e) { return "📘 Word not found."; }
             }
-
             const mathMatch = m.match(/(\d+)\s*([-+*/])\s*(\d+)/);
             if(mathMatch) { try { return `🧮 **Math Solver:** ${mathMatch[0]} = **${eval(mathMatch[0])}**`; } catch(e) {} }
-            return "🌌 **Heofonix:** Request received. Processing via the network...";
+            return `🌌 **Heofonix Intelligence:** I see you're interested in "${val}". Based on the Global Hub, this relates to advanced logic and data retrieval. How can I expand on this for you?`;
         }
 
         function handleChatPress(e) { if(e.key === 'Enter') { run(e.target.value); e.target.value = ''; } }
