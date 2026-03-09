@@ -37,7 +37,7 @@
         .page { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 10; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .active-page { display: flex; }
 
-        /* LOGO & HEOPAD TEXT STYLE (Based on your image) */
+        /* LOGO & HEOPAD TEXT STYLE */
         .logo, .heopad-logo {
             font-size: 6rem; font-weight: 900; margin-bottom: 20px;
             background: linear-gradient(to right, #2ab9ff 0%, #4f86ff 40%, #a158ff 70%, #d449ff 100%);
@@ -182,9 +182,7 @@
             "noredink": [{ name: "NoRedInk", url: "https://www.noredink.com/learn/home", desc: "Adaptive writing and grammar tools.", favicon: "https://www.noredink.com/favicon.ico" }],
             "mobymax": [{ name: "MobyMax", url: "https://www.mobymax.com/signin", desc: "Personalized learning for K-8 students.", favicon: "https://www.mobymax.com/favicon.ico" }],
             "khan": [{ name: "Khan Academy", url: "https://www.khanacademy.org/profile/me/classroom/b8942f70-39d2-462b-a506-e94c876f9063", desc: "Learn anything for free.", favicon: "https://www.khanacademy.org/favicon.ico" }],
-            "bing": [
-                { name: "Search - Microsoft Bing", url: "https://www.bing.com/", desc: "Search with Microsoft Bing and use the power of AI.", favicon: "https://www.bing.com/favicon.ico" }
-            ],
+            "bing": [{ name: "Search - Microsoft Bing", url: "https://www.bing.com/", desc: "Search with Microsoft Bing and use the power of AI.", favicon: "https://www.bing.com/favicon.ico" }],
             "liam prosser games": [{ name: "Liam Prosser Gamez", url: "https://sites.google.com/kimberly.k12.wi.us/liamprossergamez-com/home", desc: "The official game hub by Liam Prosser.", favicon: "liamlogo.jpg" }],
             "roblox": [{ name: "Roblox", url: "https://www.roblox.com/", desc: "A global platform where millions gather to create.", favicon: "https://www.roblox.com/favicon.ico" }],
             "anthropic ai": [{ name: "Anthropic AI", url: "https://www.anthropic.com", desc: "AI safety and research company building reliable AI.", favicon: "https://www.anthropic.com/favicon.ico" }],
@@ -192,12 +190,9 @@
             "michigan tornado": [{ name: "National Weather Service", url: "https://www.weather.gov/", desc: "Live tornado warnings and weather alerts for Michigan.", favicon: "https://www.weather.gov/favicon.ico" }]
         };
 
-        // --- HEOPAD LOGIC ---
         const heopadArea = document.getElementById('heopadArea');
         heopadArea.value = localStorage.getItem('heopad_content') || "";
-        heopadArea.addEventListener('input', () => {
-            localStorage.setItem('heopad_content', heopadArea.value);
-        });
+        heopadArea.addEventListener('input', () => { localStorage.setItem('heopad_content', heopadArea.value); });
 
         function downloadPad() {
             const text = heopadArea.value;
@@ -236,8 +231,9 @@
             const query = queryRaw.toLowerCase().trim();
             if (!query) return;
 
+            // Updated Redirect Logic with Kimberly Securly URL
             if (query === "unblocked") {
-                window.location.href = "https://useast-www.securly.com/blocked?useremail=32lprosser@kimberly.k12.wi.us&reason=globalblacklist&categoryid=BL&policyid=G&keyword=dW5ibG9ja2Vk&url=d3d3LmJpbmcuY29tL3NlYXJjaD9xPXVuYmxvY2tlZCZQQz1VMzE2JkZPUk09Q0hST01O&ver=-&extension_id=ckecmkbnoanpgplccmnoikfmpcdladkc&extension_version=3.0.34&internal_ip=192.168.1.1&listType=BL";
+                window.location.href = "https://useast-www.securly.com/blocked?useremail=32lprosser@kimberly.k12.wi.us&reason=globalblacklist&categoryid=BL&policyid=G&keyword=&url=bGlhbXByb3NzZXI3Ny5naXRodWIuaW8vSGVvZm9uLS91bmJsb2NrZWQ=&ver=-&extension_id=ckecmkbnoanpgplccmnoikfmpcdladkc&extension_version=3.0.34&internal_ip=192.168.1.1&listType=BL";
                 return;
             }
 
@@ -248,7 +244,6 @@
 
             const newURL = window.location.pathname + "?q=" + encodeURIComponent(queryRaw);
             window.history.pushState({ path: newURL }, '', newURL);
-
             document.getElementById('resultsSearch').value = queryRaw;
             const list = document.getElementById('results-list');
             list.innerHTML = `<h2 style="color:#00d4ff; margin-bottom:30px; font-size: 1.5rem;">Results for: ${query}</h2>`;
@@ -283,7 +278,7 @@
 
         async function getAiResponse(val) {
             const m = val.toLowerCase().trim();
-            if (["hola", "como", "esta"].some(k => m.includes(k))) return "🇪🇸 **Heofonix:** ¡Hola! ¿En qué puedo ayudarte hoy?";
+            if (["hola", "como", "esta"].some(k => m.includes(k))) return "🇪🇸 **Heofony:** ¡Hola! ¿En qué puedo ayudarte hoy?";
             if(m.includes("define")) {
                 const word = m.split(" ").pop().replace(/[?!.]/g, "");
                 try {
@@ -294,7 +289,7 @@
             }
             const mathMatch = m.match(/(\d+)\s*([-+*/])\s*(\d+)/);
             if(mathMatch) { try { return `🧮 **Math Solver:** ${mathMatch[0]} = **${eval(mathMatch[0])}**`; } catch(e) {} }
-            return `🌌 **Heofonix Intelligence:** I see you're interested in "${val}". Based on the Global Hub, this relates to advanced logic and data retrieval. How can I expand on this for you?`;
+            return `🌌 **Heofony Intelligence:** I see you're interested in "${val}". Based on the Global Hub, this relates to advanced logic and data retrieval. How can I expand on this for you?`;
         }
 
         function handleChatPress(e) { if(e.key === 'Enter') { run(e.target.value); e.target.value = ''; } }
