@@ -158,6 +158,11 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
+            
+            // Clear URL parameter when returning home
+            if(id === 'home-page') {
+                window.history.pushState({}, '', window.location.pathname);
+            }
         }
 
         function handleHomeSearch(e) { if (e.key === 'Enter') performSearch(e.target.value); }
@@ -167,6 +172,11 @@
         function performSearch(queryRaw) {
             const query = queryRaw.toLowerCase().trim();
             if (!query) return;
+
+            // Update URL so Chrome can use it
+            const newURL = window.location.pathname + "?q=" + encodeURIComponent(queryRaw);
+            window.history.pushState({ path: newURL }, '', newURL);
+
             document.getElementById('resultsSearch').value = queryRaw;
             const list = document.getElementById('results-list');
             list.innerHTML = `<h2 style="color:#00d4ff; margin-bottom:30px; font-size: 1.5rem;">Results for: ${query}</h2>`;
@@ -180,6 +190,15 @@
             if (!found) renderResult(`Search Google for "${query}"`, `https://google.com/search?q=${query}`, `Global results for "${query}"`, "https://www.google.com/favicon.ico");
             showPage('results-page');
         }
+
+        // AUTO-SEARCH ON LOAD
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+                performSearch(query);
+            }
+        };
 
         function renderResult(title, url, desc, favicon) {
             document.getElementById('results-list').innerHTML += `
