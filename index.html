@@ -186,7 +186,7 @@
         let isSafeSearch = true;
 
         const searchDB = {
-            "appleton packing and gasket": [{ name: "Appleton Packing & Gasket", url: "https://appletonpackinggasket.com/", desc: "Industrial packing and gasket solutions for all applications.", favicon: "1631326392652.jpeg" }],
+            "appleton": [{ name: "Appleton Packing & Gasket", url: "https://appletonpackinggasket.com/", desc: "Industrial packing and gasket solutions for all applications.", favicon: "1631326392652.jpeg" }],
             "wwe": [{ name: "WWE Official Site", url: "https://www.wwe.com/", desc: "World Wrestling Entertainment - Home of Raw, SmackDown, and NXT.", favicon: "https://www.wwe.com/favicon.ico" }],
             "wikipedia": [{ name: "Wikipedia", url: "https://www.wikipedia.org/", desc: "The free encyclopedia that anyone can edit.", favicon: "https://www.wikipedia.org/static/favicon/wikipedia.ico" }],
             "youtube": [{ name: "YouTube", url: "https://www.youtube.com/", desc: "Enjoy the videos and music you love, upload original content, and share it all.", favicon: "https://www.youtube.com/favicon.ico" }],
@@ -251,9 +251,6 @@
             "anthropic ai": "Anthropic is a safety-focused AI research company, known for developing Claude and pushing the boundaries of reliable, helpful artificial intelligence.",
             "nascar": "NASCAR is the ultimate stock car racing organization, hosting iconic high-speed events and competitive championships across North America.",
             "michigan tornado": "Current weather tracking for Michigan focuses on severe storm alerts and tornado warning systems to ensure public safety during extreme events."
-            "heofon": "heofon is a global search engine that uses vast searchs for users in the superintelligence model."    
-            "noredink": "Grammer tools for learners in a school platform that focus on grammer and writing for more check below."
-        
         };
 
         async function performSearch(queryRaw) {
@@ -327,7 +324,7 @@
             }
             const mathMatch = m.match(/(\d+)\s*([-+*/])\s*(\d+)/);
             if(mathMatch) { try { return `🧮 **Math Solver:** ${mathMatch[0]} = **${eval(mathMatch[0])}**`; } catch(e) {} }
-            return `🌌 **Heofonix Intelligence:** I've analyzed "${val}" through the Global Hub. This subject involves complex data structures within the Heofon network. You'll find the most relevant secure portals listed below.`;
+            return `🌌 **Heofony Intelligence:** I've analyzed "${val}" through the Global Hub. This subject involves complex data structures within the Heofon network. You'll find the most relevant secure portals listed below.`;
         }
 
         function handleChatPress(e) { if(e.key === 'Enter') { run(e.target.value); e.target.value = ''; } }
