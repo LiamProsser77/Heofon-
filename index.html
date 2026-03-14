@@ -104,13 +104,30 @@
         .results-nav { width: 100%; display: flex; gap: 15px; align-items: center; margin-bottom: 40px; padding-top: 20px; flex-shrink: 0; flex-wrap: wrap; }
         .mini-logo { font-size: 2.2rem; font-weight: 900; background: linear-gradient(45deg, #00d4ff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
         
+        /* RESULTS LAYOUT */
+        .results-main-container { display: flex; width: 100%; gap: 40px; align-items: flex-start; }
+        .results-left-column { flex: 1; max-width: 800px; }
+        
+        /* THE SIDE THING */
+        .results-side-panel {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
         .ai-ask-btn { padding: 12px 20px; border-radius: 30px; border: none; background: #00d4ff; color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; }
         .ai-ask-btn:hover { background: #ff00ff; color: #fff; transform: translateY(-2px); }
 
         .safe-toggle { padding: 10px 15px; border-radius: 20px; border: 1px solid #555; background: rgba(255,255,255,0.1); color: #fff; font-size: 0.8rem; cursor: pointer; font-weight: bold; }
         .safe-on { border-color: #00ff88; color: #00ff88; }
 
-        .result-item { margin-bottom: 35px; width: 100%; max-width: 800px; animation: fadeIn 0.5s ease; }
+        .result-item { margin-bottom: 35px; width: 100%; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; color: #bdc1c6; font-size: 0.9rem; }
         .result-favicon { width: 24px; height: 24px; border-radius: 4px; object-fit: contain; background: white; padding: 2px; }
@@ -180,8 +197,26 @@
             <button class="ai-ask-btn" onclick="askCurrentQueryToAI()">Ask Heofonix</button>
             <div id="safeToggle" class="safe-toggle safe-on" onclick="toggleSafeSearch()">Safe Search: ON</div>
         </div>
-        <div id="ai-insight-target"></div>
-        <div id="results-list" style="width: 100%; max-width: 850px;"></div>
+
+        <div class="results-main-container">
+            <div class="results-left-column">
+                <div id="ai-insight-target"></div>
+                <div id="results-list"></div>
+            </div>
+            
+            <div class="results-side-panel" id="results-side-panel">
+                <h3 id="side-title" style="color:#00d4ff; margin-bottom:15px; font-size: 1.4rem;">Knowledge Hub</h3>
+                <div id="side-content" style="color:#bdc1c6; font-size: 0.95rem; line-height: 1.6;">
+                    Search Heofon to unlock deep intelligence insights here.
+                </div>
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(0,212,255,0.2);">
+                <p style="color:#00d4ff; font-size: 0.8rem; text-transform:uppercase;">Quick Actions</p>
+                <ul style="list-style: none; margin-top: 10px;">
+                    <li style="margin-bottom: 8px; cursor:pointer; color:#8ab4f8;" onclick="showPage('heopad-page')">➜ Open in Heopad</li>
+                    <li style="margin-bottom: 8px; cursor:pointer; color:#8ab4f8;" onclick="askCurrentQueryToAI()">➜ Chat with Heofonix</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div id="about-page" class="page">
@@ -205,7 +240,7 @@
     <script>
         let isSafeSearch = true;
 
-        // --- FULL SEARCH DATABASE (41 ENTRIES RESTORED) ---
+        // --- FULL SEARCH DATABASE ---
         const searchDB = {
             "appleton": [{ name: "Appleton Packing & Gasket", url: "https://appletonpackinggasket.com/", desc: "Industrial packing and gasket solutions for all applications.", favicon: "1631326392652.jpeg" }],
             "wwe": [{ name: "WWE Official Site", url: "https://www.wwe.com/", desc: "World Wrestling Entertainment - Home of Raw, SmackDown, and NXT.", favicon: "https://www.wwe.com/favicon.ico" }],
@@ -250,7 +285,7 @@
             "unblocked games": [{ name: "Unblocked Games 66", url: "https://sites.google.com/site/unblockedgames66ez/", desc: "Play thousands of unblocked games at school.", favicon: "https://www.google.com/favicon.ico" }]
         };
 
-        // --- FULL AI INSIGHTS RESTORED ---
+        // --- FULL AI INSIGHTS ---
         const insightDB = {
             "heofon": "Heofon is an advanced Search Engine, find all your wants and needs.",
             "appleton": "Appleton Packing & Gasket is an industrial leader specializing in high-performance sealing solutions and custom gasket fabrication for global infrastructure.",
@@ -334,6 +369,10 @@
                     <p style="font-size:1.1rem; line-height:1.4;">${desc}</p>
                 </div>`;
 
+            // UPDATE SIDE THING
+            document.getElementById('side-title').innerText = queryRaw.toUpperCase();
+            document.getElementById('side-content').innerText = desc;
+
             const list = document.getElementById('results-list');
             list.innerHTML = `<h2 style="color:#00d4ff; margin-bottom:30px; font-size: 1.5rem;">Results for: ${query}</h2>`;
             
@@ -385,7 +424,7 @@
 
         async function getAiResponse(val) {
             const m = val.toLowerCase().trim();
-            if (["hola", "como", "esta"].some(k => m.includes(k))) return "🇪🇸 **Heofony:** ¡Hola! ¿En qué puedo ayudarte hoy?";
+            if (["hola", "como", "esta"].some(k => m.includes(k))) return "🇪🇸 **Heofonix:** ¡Hola! ¿En qué puedo ayudarte hoy?";
             
             if(m.includes("define")) {
                 const word = m.split(" ").pop().replace(/[?!.]/g, "");
